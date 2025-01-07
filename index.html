@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Serás Mi Valentín?</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #f4a6c0;
+            color: #5a2a27;
+            text-align: center;
+            padding: 50px;
+            overflow: hidden;
+            position: relative;
+            background-image: url('https://www.transparenttextures.com/patterns/pw-maze.png');
+            background-size: cover;
+            background-position: center;
+            transition: background-color 1s ease;
+        }
+        
+
+        h1, h2 {
+            font-size: 2.5em;
+            color: #b23a48;
+        }
+
+        p {
+            font-size: 1.5em;
+        }
+
+        .heart {
+            font-size: 4em;
+            color: #b23a48;
+            animation: pulse 1.5s infinite;
+            margin-top: 20px;
+        }
+
+        .button-pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        button {
+            background-color: #b23a48;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #d74c5a;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 1.2em;
+            margin-top: 10px;
+            border-radius: 10px;
+            border: 2px solid #b23a48;
+            width: 80%;
+            text-align: center;
+        }
+
+        .sayings {
+            margin-top: 20px;
+            font-size: 1.3em;
+            color: #b23a48;
+            font-weight: bold;
+        }
+
+        .dog {
+            position: absolute;
+            width: 200px;
+            animation: float 8s infinite;
+        }
+
+        .dog:nth-child(1) {
+            left: 10%;
+            top: 0%;
+            animation-delay: 0s;
+        }
+
+        .dog:nth-child(2) {
+            left: 80%;
+            top: 50%;
+            animation-delay: 2s;
+        }
+
+        .dog:nth-child(3) {
+            left: 10%;
+            bottom: -20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .location-image {
+            width: 30%;
+            max-width: 200px;
+            margin-top: 5px;
+            border-radius: 5px;
+        }
+
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .pop-up {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            font-size: 1.5em;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .pop-up button {
+            background-color: #d74c5a;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .pop-up button:hover {
+            background-color: #b23a48;
+        }
+
+        .next-page {
+            display: none;
+            font-size: 2em;
+        }
+
+        .move-button {
+            position: absolute;
+            transition: transform 0.2s;
+        }
+
+        #kevinG-screen {
+            display: none;
+            text-align: center;
+        }
+
+        #kevinG-screen img {
+            width: 300px;
+        }
+        button:hover {
+            background-color: #d74c5a;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        .move-button {
+            position: absolute; /* Added to enable dynamic movement */
+            transition: transform 0.2s;
+        }
+    </style>
+</head>
+<body>
+    <div id="pre-screen" class="fade-in">
+        <h1>Bienvenida mi amor.. ¿Cómo estás hoy?</h1>
+        <input type="text" id="user-response" placeholder="Escribe tu respuesta aquí" />
+        <button class="button-pulse" onclick="submitResponse()">Enviar</button>
+    </div>
+
+    <div id="transition-screen" class="fade-in" style="display: none;">
+        <h2>Espero que hayas dicho bien, tengo algo que preguntarte...</h2>
+        <button class="button-pulse" onclick="goToOriginalContent()">Dale</button>
+    </div>
+
+    <div id="original-content" class="fade-in" style="display: none;">
+        <img src="https://tinypic.host/images/2025/01/05/IMG_6288.gif" alt="IMG 6288" class="dog">
+        <img src="https://tinypic.host/images/2025/01/05/IMG_5686.gif" alt="dog gif" class="dog">
+        <img src="https://tinypic.host/images/2025/01/05/IMG_4662.gif" alt="IMG 4662" class="dog">
+
+        <h1 id="valentineName">
+            Mi querida domi, <br>
+            La que me alegra el día, <br>
+            Con tu bella sonrisa, <br>
+            Me llenas de alegría
+        </h1>
+        <p>Cuanto Quisiera que este san valentin ¿Fueras mia?</p>
+        
+        <p class="heart">🌹❤️🐶🐾🐶❤️🌹</p>
+        <div>
+            <button class="button-pulse" onclick="sayYes()">¡Claro Que Si!</button>
+            <button class="button-pulse" id="noButton" class="move" onclick="sayNo()" class="move-button">No</button>
+        </div>
+        <div class="sayings" id="sayings"></div>
+    </div>
+
+    <div id="ask-location" class="fade-in" style="display: none;">
+        <h2>Good Girl Asi Me Gusta.</h2>
+        <p>Now Pick... ❤️🐶</p>
+        <h3>¿Donde quieres ir bebesita?</h3>
+        <div>
+            <img src="https://www.tripsavvy.com/thmb/X1noqpPb0L654YUCcthg9E1Fdy4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1164998882-6bcd8aa5b6124528b16b56089f4bf47d.jpg" alt="San Antonio" class="location-image">
+            <button class="button-pulse" onclick="showPopup()">San Antonio</button>
+        </div>
+        <div>
+            <img src="https://th.bing.com/th/id/OIP.N6P4PmWQd2qG-JdnDcFq9gAAAA?rs=1&pid=ImgDetMain" alt="Puerto Rico" class="location-image">
+            <button class="button-pulse" onclick="showPopup()">Puerto Rico</button>
+        </div>
+        <button class="button-pulse" onclick="transitionToNextStage()">Al Mundo Entero Pero San Antonio Primero ¡Baibei!</button>
+    </div>
+
+    <div id="next-page" class="next-page">
+        <h2>Suena como un plan mi chocoflan! Pero tengo algo que preguntarte...</h2>
+        <button class="button-pulse" onclick="finalizePlan()">Si mi rey?</button>
+    </div>
+
+    <div id="love-page" class="next-page">
+        <h2>Cuanto me quieres?</h2>
+        <button class="button-pulse" onclick="addMucho()">Mucho</button>
+        <p id="muchoText">Se honesta.</p>
+    </div>
+
+    <div id="kevinG-screen" class="fade-in">
+        <h2 class="animated-text">Yo mas mi reina, no puedo esperar a pasar este dia tan cabron con una persona tan maravillosa como usted, Te amo🫶🏼❤️😘👩🏽‍❤️‍👨🏻</h2>
+        <div class="image-container">
+            <a href="https://tinypic.host/image/IMG-4695-%281%29.2613td">
+                <img class="floating-img" src="https://tinypic.host/images/2025/01/07/IMG_4695-1.jpg" alt="IMG 4695 (1)" border="0" />
+            </a>
+            <a href="https://tinypic.host/image/IMG-5039.261ae5">
+                <img class="floating-img" src="https://tinypic.host/images/2025/01/07/IMG_5039.jpg" alt="IMG 5039" border="0" />
+            </a>
+            <a href="https://tinypic.host/image/IMG-5059.261il9">
+                <img class="floating-img" src="https://tinypic.host/images/2025/01/07/IMG_5059.jpeg" alt="IMG 5059" border="0" />
+            </a>
+            <a href="https://tinypic.host/image/trim.B439D39A-3A3D-43AE-9A14-35C5349C8AA3.261kte">
+                <img class="floating-img" src="https://tinypic.host/images/2025/01/07/trim.B439D39A-3A3D-43AE-9A14-35C5349C8AA3.gif" alt="trim.B439D39A 3A3D 43AE 9A14 35C5349C8AA3" border="0" />
+            </a>
+        </div>
+    </div>
+    
+    <style>
+        /* Container for images */
+        .image-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px; /* Space between images */
+            width: 100%;
+            max-width: 1200px; /* Max width for the images */
+            margin: 0 auto; /* Center the images container */
+            padding-top: 20px; /* Add some padding to push images a bit down */
+        }
+    
+        /* Floating images with fixed size */
+        .floating-img {
+            width: 150px; /* Fixed width */
+            height: 450px; /* Fixed height */
+            object-fit: cover; /* Ensures images are resized without distorting aspect ratio */
+            animation: float 3s ease-in-out infinite;
+        }
+    
+        /* Float animation */
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+    
+        /* Animation for the text */
+        .animated-text {
+            opacity: 0;
+            animation: fadeIn 3s ease-in-out forwards;
+            margin-bottom: 20px; /* Adds space below the text */
+        }
+    
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px); /* Starts the text off-screen */
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0); /* Ends at normal position */
+            }
+        }
+    </style>
+    
+
+    
+    
+    
+
+    <div class="pop-up" id="pop-up">
+        <p>Oh thats not...</p>
+        <button onclick="closePopup()">Cerrar</button>
+    </div>
+    
+
+    <script>
+        function submitResponse() {
+            document.getElementById('pre-screen').style.display = 'none';
+            document.getElementById('transition-screen').style.display = 'block';
+        }
+
+        function goToOriginalContent() {
+            document.getElementById('transition-screen').style.display = 'none';
+            document.getElementById('original-content').style.display = 'block';
+        }
+
+        function sayYes() {
+            document.getElementById('original-content').style.display = 'none';
+            document.getElementById('ask-location').style.display = 'block';
+        }
+
+        function sayNo() {
+    // Array with different responses
+    const responses = [
+        "Mami no jodas no tienes otra opcion🔫",
+        "De pinga asere👿",
+        "Di que no otra vez y ya veras cabrona😡",
+        "Es que vas a decir que si TF🤬",
+        "Si o la glizzy👺🔫",
+        "Yo si me enpingo rapido brother anda di que si😾",
+        "Ulta ❌",
+        "Sephora❌",
+        "Costco❌",
+        "Celcius❌",
+        "Luna me diria que si😒"
+    ];
+    
+    // Get a random index from the responses array
+    const randomIndex = Math.floor(Math.random() * responses.length);
+    
+    // Set the random response to the text
+    document.getElementById('sayings').innerText = responses[randomIndex];
+}
+
+        function showPopup() {
+            const popup = document.getElementById('pop-up');
+            popup.style.display = 'block';
+        }
+
+        function closePopup() {
+            const popup = document.getElementById('pop-up');
+            popup.style.display = 'none';
+        }
+
+        function transitionToNextStage() {
+            document.getElementById('ask-location').style.display = 'none';
+            document.getElementById('next-page').style.display = 'block';
+        }
+
+        function finalizePlan() {
+            document.getElementById('next-page').style.display = 'none';
+            document.getElementById('love-page').style.display = 'block';
+        }
+
+        let muchoClicks = 0; // Track the number of clicks
+const muchos = [
+    "hmmm aun no te creo😮‍💨", 
+    "Okay Okay maybe😳Usted me hace rizz", 
+    "Mas que a Kevin G?🙂‍↔️", 
+    "Mas que tatum?😈", 
+    "Mas que Karol G?😱"
+];
+
+function addMucho() {
+    muchoClicks++; // Increment the counter each time the button is clicked
+    if (muchoClicks >= 6) {
+        // When the button has been clicked 5 times, show the new screen
+        document.getElementById('love-page').style.display = 'none';
+        document.getElementById('kevinG-screen').style.display = 'block';
+    } else {
+        // Otherwise, update the text with the corresponding message
+        document.getElementById('muchoText').innerText = muchos[muchoClicks - 1];
+    }
+}
+
+function showKevinResponse(response) {
+    document.getElementById('kevinG-screen').style.display = 'none';
+    if (response) {
+        alert("¡Eres el mejor!");
+    } else {
+        alert("¡Pero más que Kevin G!");
+    }
+}
+
+        function showKevinResponse(response) {
+            if (response) {
+                document.getElementById('kevinG-screen').style.display = 'none';
+                alert("¡Eres el mejor!");
+            } else {
+                document.getElementById('kevinG-screen').style.display = 'none';
+                alert("¡Pero más que Kevin G!");
+            }
+        }
+        const noButton = document.getElementById('noButton');
+        noButton.addEventListener('mouseover', () => {
+            const maxX = window.innerWidth - noButton.offsetWidth;
+            const maxY = window.innerHeight - noButton.offsetHeight;
+
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+
+            noButton.style.left = `${randomX}px`;
+            noButton.style.top = `${randomY}px`;
+        });
+        
+        
+    </script>
+</body>
+</html>
